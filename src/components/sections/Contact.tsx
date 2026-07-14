@@ -22,43 +22,26 @@ export default function Contact() {
     setLoading(true);
 
     try {
-      // Use Formspree to send the mail directly to shlokpan930@gmail.com in the background
-      // Shlok can register a free account on formspree.io and paste their Form ID here.
-      const formspreeId = "xjkbryzw"; 
-      const response = await fetch(`https://formspree.io/f/${formspreeId}`, {
+      const response = await fetch("/api/contact", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Accept": "application/json"
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           name: form.name,
           email: form.email,
           message: form.message,
-          _subject: `Secure Message from Portfolio: ${form.name}`
-        })
+        }),
       });
+
+      const data = await response.json();
 
       if (response.ok) {
         setSuccess(true);
         setForm({ name: "", email: "", message: "" });
       } else {
-        // Fallback: If Formspree fails (e.g. rate limit), open Gmail compose window directly
-        const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=shlokpan930@gmail.com&su=Secure+Message+from+${encodeURIComponent(form.name)}&body=${encodeURIComponent(
-          `Hello Shlok,\n\nYou received a secure message from your portfolio site:\n\nName: ${form.name}\nEmail: ${form.email}\n\nMessage:\n${form.message}`
-        )}`;
-        window.open(gmailUrl, "_blank");
-        setSuccess(true);
-        setForm({ name: "", email: "", message: "" });
+        setError(data.error || "Something went wrong. Please try again.");
       }
     } catch (err) {
-      // Fallback on network error
-      const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=shlokpan930@gmail.com&su=Secure+Message+from+${encodeURIComponent(form.name)}&body=${encodeURIComponent(
-        `Hello Shlok,\n\nYou received a secure message from your portfolio site:\n\nName: ${form.name}\nEmail: ${form.email}\n\nMessage:\n${form.message}`
-      )}`;
-      window.open(gmailUrl, "_blank");
-      setSuccess(true);
-      setForm({ name: "", email: "", message: "" });
+      setError("Network error. Please check your connection and try again.");
     } finally {
       setLoading(false);
     }

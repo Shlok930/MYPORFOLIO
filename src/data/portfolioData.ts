@@ -31,10 +31,10 @@ export const personalInfo = {
   name: "Shlok Pandey",
   title: "Full Stack Developer & AI Enthusiast",
   location: "Bhopal, Madhya Pradesh, India",
-  email: "shlokpandey.dev@gmail.com",
+  email: "shlokpan930@gmail.com",
   github: "https://github.com/Shlok930",
-  linkedin: "https://linkedin.com/in/shlokpandey",
-  twitter: "https://twitter.com/shlok_pandey",
+  linkedin: "https://www.linkedin.com/in/shlok-pandey-b29190309/",
+  twitter: "https://x.com/Shlok_ify",
   education: {
     degree: "B.Tech in Computer Science & Engineering",
     institution: "Oriental Institute of Science and Technology, Bhopal",

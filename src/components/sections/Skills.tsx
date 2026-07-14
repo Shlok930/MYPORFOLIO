@@ -37,7 +37,7 @@ const iconMap: Record<string, IconType> = {
 
 export default function Skills() {
   return (
-    <section id="skills" className="py-24 relative w-full overflow-hidden">
+    <section id="skills" className="py-36 md:py-48 relative w-full overflow-hidden">
       {/* Background neon glow elements */}
       <div className="absolute bottom-1/4 right-1/4 w-[400px] h-[400px] bg-accent/3 rounded-full filter blur-[120px] pointer-events-none" />
 

@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Send, CheckCircle2, Mail, ArrowUpRight } from "lucide-react";
-import { FaGithub, FaLinkedin, FaTwitter } from "react-icons/fa";
+import { FaGithub, FaLinkedin, FaTwitter, FaInstagram } from "react-icons/fa";
 import { personalInfo } from "@/data/portfolioData";
 
 export default function Contact() {
@@ -12,7 +12,7 @@ export default function Contact() {
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState("");
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!form.name || !form.email || !form.message) {
       setError("Please fill out all fields.");
@@ -21,23 +21,59 @@ export default function Contact() {
     setError("");
     setLoading(true);
 
-    // Mock API server transmission
-    setTimeout(() => {
-      setLoading(false);
+    try {
+      // Use Formspree to send the mail directly to shlokpan930@gmail.com in the background
+      // Shlok can register a free account on formspree.io and paste their Form ID here.
+      const formspreeId = "xjkbryzw"; 
+      const response = await fetch(`https://formspree.io/f/${formspreeId}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Accept": "application/json"
+        },
+        body: JSON.stringify({
+          name: form.name,
+          email: form.email,
+          message: form.message,
+          _subject: `Secure Message from Portfolio: ${form.name}`
+        })
+      });
+
+      if (response.ok) {
+        setSuccess(true);
+        setForm({ name: "", email: "", message: "" });
+      } else {
+        // Fallback: If Formspree fails (e.g. rate limit), open Gmail compose window directly
+        const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=shlokpan930@gmail.com&su=Secure+Message+from+${encodeURIComponent(form.name)}&body=${encodeURIComponent(
+          `Hello Shlok,\n\nYou received a secure message from your portfolio site:\n\nName: ${form.name}\nEmail: ${form.email}\n\nMessage:\n${form.message}`
+        )}`;
+        window.open(gmailUrl, "_blank");
+        setSuccess(true);
+        setForm({ name: "", email: "", message: "" });
+      }
+    } catch (err) {
+      // Fallback on network error
+      const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=shlokpan930@gmail.com&su=Secure+Message+from+${encodeURIComponent(form.name)}&body=${encodeURIComponent(
+        `Hello Shlok,\n\nYou received a secure message from your portfolio site:\n\nName: ${form.name}\nEmail: ${form.email}\n\nMessage:\n${form.message}`
+      )}`;
+      window.open(gmailUrl, "_blank");
       setSuccess(true);
       setForm({ name: "", email: "", message: "" });
-    }, 1800);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const socials = [
-    { name: "Email", value: personalInfo.email, link: `mailto:${personalInfo.email}`, icon: Mail, color: "hover:text-accent" },
-    { name: "GitHub", value: "@shlokpandey", link: personalInfo.github, icon: FaGithub, color: "hover:text-white" },
+    { name: "Email", value: "shlokpan930@gmail.com", link: "mailto:shlokpan930@gmail.com", icon: Mail, color: "hover:text-accent" },
+    { name: "GitHub", value: "@Shlok930", link: personalInfo.github, icon: FaGithub, color: "hover:text-white" },
     { name: "LinkedIn", value: "Shlok Pandey", link: personalInfo.linkedin, icon: FaLinkedin, color: "hover:text-accent" },
-    { name: "Twitter/X", value: "@shlok_pandey", link: personalInfo.twitter, icon: FaTwitter, color: "hover:text-accent-cyan" },
+    { name: "Instagram", value: "@itz_shlokkk", link: "https://www.instagram.com/itz_shlokkk/", icon: FaInstagram, color: "hover:text-rose-500" },
+    { name: "Twitter/X", value: "@Shlok_ify", link: personalInfo.twitter, icon: FaTwitter, color: "hover:text-accent-cyan" },
   ];
 
   return (
-    <section id="contact" className="py-24 relative w-full overflow-hidden">
+    <section id="contact" className="py-36 md:py-48 relative w-full overflow-hidden">
       {/* Background highlight glows */}
       <div className="absolute top-1/2 left-0 w-[400px] h-[400px] bg-accent/3 rounded-full filter blur-[120px] pointer-events-none" />
 
@@ -119,7 +155,7 @@ export default function Contact() {
 
                   {/* Email field */}
                   <div className="flex flex-col gap-2">
-                    <label className="text-[10px] text-zinc-500 font-mono uppercase tracking-wider">Email Address</label>
+                    <label className="text-[10px] text-zinc-550 font-mono uppercase tracking-wider">Email Address</label>
                     <input
                       type="email"
                       value={form.email}
@@ -133,7 +169,7 @@ export default function Contact() {
 
                   {/* Message field */}
                   <div className="flex flex-col gap-2">
-                    <label className="text-[10px] text-zinc-500 font-mono uppercase tracking-wider">Message</label>
+                    <label className="text-[10px] text-zinc-555 font-mono uppercase tracking-wider">Message</label>
                     <textarea
                       value={form.message}
                       onChange={(e) => setForm({ ...form, message: e.target.value })}

@@ -10,7 +10,7 @@ const InteractiveGlobe = dynamic(() => import("../3d/InteractiveGlobe"), { ssr: 
 
 export default function About() {
   return (
-    <section id="about" className="py-24 relative w-full overflow-hidden">
+    <section id="about" className="py-36 md:py-48 relative w-full overflow-hidden">
       {/* Glow highlight */}
       <div className="absolute top-1/4 left-1/4 w-[450px] h-[450px] bg-accent/3 rounded-full filter blur-[130px] pointer-events-none" />
 

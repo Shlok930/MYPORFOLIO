@@ -99,7 +99,7 @@ export default function Projects() {
   };
 
   return (
-    <section id="projects" className="py-24 relative w-full overflow-hidden">
+    <section id="projects" className="py-36 md:py-48 relative w-full overflow-hidden">
       {/* Background glow highlights */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[550px] h-[550px] bg-accent/3 rounded-full filter blur-[150px] pointer-events-none" />
 

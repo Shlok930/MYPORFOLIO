@@ -10,7 +10,7 @@ import { useKeyboardShortcuts } from "@/hooks/useKeyboardShortcuts";
 
 // UI/3D elements
 import CustomCursor from "@/components/ui/CustomCursor";
-import MusicToggle from "@/components/ui/MusicToggle";
+
 import CommandPalette from "@/components/ui/CommandPalette";
 import AiWidget from "@/components/ui/AiWidget";
 
@@ -27,7 +27,7 @@ import Footer from "@/components/sections/Footer";
 export default function Home() {
   const [isLoading, setIsLoading] = useState(true);
   const [cursorEnabled, setCursorEnabled] = useState(true);
-  const [musicPlaying, setMusicPlaying] = useState(false);
+
   const [paletteOpen, setPaletteOpen] = useState(false);
   const [shortcutsOpen, setShortcutsOpen] = useState(false);
 
@@ -56,7 +56,7 @@ export default function Home() {
   // Define global keyboard shortcuts
   useKeyboardShortcuts({
     c: () => setCursorEnabled((prev) => !prev),
-    m: () => setMusicPlaying((prev) => !prev),
+
     "ctrl+k": () => setPaletteOpen((prev) => !prev),
     k: () => setPaletteOpen((prev) => !prev),
     h: () => window.scrollTo({ top: 0, behavior: "smooth" }),
@@ -82,16 +82,10 @@ export default function Home() {
           {/* 3. Global Helpers */}
           <CustomCursor enabled={cursorEnabled} />
           
-          <MusicToggle
-            isPlaying={musicPlaying}
-            onToggle={() => setMusicPlaying(!musicPlaying)}
-          />
-
           <CommandPalette
             isOpen={paletteOpen}
             onClose={() => setPaletteOpen(false)}
             toggleCursor={() => setCursorEnabled(!cursorEnabled)}
-            toggleMusic={() => setMusicPlaying(!musicPlaying)}
           />
 
           <AiWidget />
@@ -156,10 +150,7 @@ export default function Home() {
                       <span>Toggle Morphing Cursor</span>
                       <kbd className="px-2 py-0.5 rounded-sm bg-zinc-900 border border-zinc-800 text-zinc-400">C</kbd>
                     </div>
-                    <div className="flex justify-between items-center py-2 border-b border-luxury-border/50">
-                      <span>Toggle Ambient Synth</span>
-                      <kbd className="px-2 py-0.5 rounded-sm bg-zinc-900 border border-zinc-800 text-zinc-400">M</kbd>
-                    </div>
+
                     <div className="flex justify-between items-center py-2 border-b border-luxury-border/50">
                       <span>Scroll to Top / Hero</span>
                       <kbd className="px-2 py-0.5 rounded-sm bg-zinc-900 border border-zinc-800 text-zinc-400">H</kbd>

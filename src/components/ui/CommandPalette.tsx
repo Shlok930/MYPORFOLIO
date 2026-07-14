@@ -8,14 +8,12 @@ interface CommandPaletteProps {
   isOpen: boolean;
   onClose: () => void;
   toggleCursor: () => void;
-  toggleMusic: () => void;
 }
 
 export default function CommandPalette({
   isOpen,
   onClose,
   toggleCursor,
-  toggleMusic,
 }: CommandPaletteProps) {
   const [search, setSearch] = useState("");
   const [activeIndex, setActiveIndex] = useState(0);
@@ -39,9 +37,8 @@ export default function CommandPalette({
 
   const actions: CommandItem[] = [
     { name: "Toggle Custom Cursor (Shortcut: C)", icon: Sparkles, perform: () => { toggleCursor(); onClose(); }, type: "action" },
-    { name: "Toggle Ambient Synth (Shortcut: M)", icon: Music, perform: () => { toggleMusic(); onClose(); }, type: "action" },
     { name: "View GitHub Profile", icon: Globe, perform: () => { window.open("https://github.com/Shlok930", "_blank"); onClose(); }, type: "action" },
-    { name: "View LinkedIn Profile", icon: Globe, perform: () => { window.open("https://linkedin.com/in/shlokpandey", "_blank"); onClose(); }, type: "action" },
+    { name: "View LinkedIn Profile", icon: Globe, perform: () => { window.open("https://www.linkedin.com/in/shlok-pandey-b29190309/", "_blank"); onClose(); }, type: "action" },
     { name: "Download Resume", icon: FileText, perform: () => { handleDownloadResume(); onClose(); }, type: "action" },
   ];
 

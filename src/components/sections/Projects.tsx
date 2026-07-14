@@ -5,7 +5,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import { ExternalLink, X, Server, Layers, Cpu, ShieldAlert } from "lucide-react";
 import { projectsData, Project } from "@/data/portfolioData";
 import GithubWidget from "../ui/GithubWidget";
-import { FaGithub } from "react-icons/fa";
+
+
 
 export default function Projects() {
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
@@ -295,20 +296,10 @@ export default function Projects() {
               {/* Action Buttons */}
               <div className="flex items-center gap-4 mt-4 border-t border-luxury-border/60 pt-6">
                 <a
-                  href={selectedProject.github}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="flex-1 py-3 px-4 bg-zinc-900 border border-luxury-border hover:bg-zinc-800 text-white rounded-xl text-center font-sans font-bold text-xs tracking-wide transition-colors flex items-center justify-center gap-2"
-                  data-cursor="pointer"
-                >
-                  <FaGithub className="w-4 h-4" />
-                  <span>GitHub Repository</span>
-                </a>
-                <a
                   href={selectedProject.live}
                   target="_blank"
                   rel="noreferrer"
-                  className="flex-1 py-3 px-4 bg-accent hover:bg-accent/80 text-white rounded-xl text-center font-sans font-bold text-xs tracking-wide transition-colors flex items-center justify-center gap-2"
+                  className="w-full py-3.5 px-4 bg-accent hover:bg-accent/80 text-white rounded-xl text-center font-sans font-bold text-sm tracking-wide transition-colors flex items-center justify-center gap-2"
                   data-cursor="pointer"
                 >
                   <ExternalLink className="w-4 h-4" />

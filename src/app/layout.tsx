@@ -53,8 +53,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark">
+    <html lang="en" className="dark" suppressHydrationWarning>
       <body
+        suppressHydrationWarning
         className={`${plusJakartaSans.variable} ${fraunces.variable} ${caveat.variable} antialiased bg-luxury-bg text-foreground`}
       >
         {children}

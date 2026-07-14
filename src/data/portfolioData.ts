@@ -128,7 +128,7 @@ export const projectsData: Project[] = [
     role: "Full Stack Engineer — Designed the prompt layout, integrated Speech-to-Text APIs, and developed the FastAPI backend server.",
     architecture: "Next.js Client -> FastAPI REST Server -> Gemini API / WHO Knowledge Graph",
     github: "https://github.com/Shlok930/health-chatbot",
-    live: "https://health-advisor-demo.vercel.app",
+    live: "https://mediawaree.vercel.app/",
     image: "/projects/health-chatbot.png",
     metric: "WHO Guidelines"
   },
@@ -149,7 +149,7 @@ export const projectsData: Project[] = [
     role: "Backend Lead — Developed the optimization engine, DB structure, and API routes in FastAPI; assisted on React dashboard layouts.",
     architecture: "React SPA -> FastAPI Server (Python) -> NumPy/NetworkX -> PostgreSQL",
     github: "https://github.com/Shlok930/rake-optimizer",
-    live: "https://rake-opt-demo.vercel.app",
+    live: "https://rake-optimizer.vercel.app/",
     image: "/projects/rake.png",
     metric: "NP-Hard Solver"
   },

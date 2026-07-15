@@ -49,17 +49,26 @@ export default function CommandPalette({
     { id: "api-healer", name: "Project: Autonomous API Healer", icon: Zap, type: "project" },
   ];
 
-  const handleDownloadResume = () => {
-    // Generate a simple client-side dummy PDF / download stream to simulate resume download perfectly
-    const link = document.createElement("a");
-    link.href = "#";
-    link.setAttribute("download", "Shlok_Pandey_Resume.pdf");
-    // Trigger download of a mock PDF
-    const content = new Blob(["Shlok Pandey - Software Engineer Portfolio Resume"], { type: "text/plain" });
-    link.href = URL.createObjectURL(content);
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+  const handleDownloadResume = async () => {
+    try {
+      const response = await fetch(
+        "https://www.image2url.com/r2/default/documents/1784142209485-27f21cd5-3b4e-4791-bbb9-10f1f8e97d3d.pdf"
+      );
+      const blob = await response.blob();
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", "Shlok_Pandey_Resume.pdf");
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+    } catch {
+      window.open(
+        "https://www.image2url.com/r2/default/documents/1784142209485-27f21cd5-3b4e-4791-bbb9-10f1f8e97d3d.pdf",
+        "_blank"
+      );
+    }
   };
 
   const handleNav = (id: string) => {

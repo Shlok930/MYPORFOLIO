@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { X, Keyboard } from "lucide-react";
 import Lenis from "lenis";
+import dynamic from "next/dynamic";
 
 // Custom helper hooks
 import { useKeyboardShortcuts } from "@/hooks/useKeyboardShortcuts";
@@ -15,7 +16,8 @@ import CommandPalette from "@/components/ui/CommandPalette";
 import AiWidget from "@/components/ui/AiWidget";
 
 // Sections
-import Loader from "@/components/sections/Loader";
+// Loader is client-only (no SSR) to prevent hydration mismatch from browser extensions
+const Loader = dynamic(() => import("@/components/sections/Loader"), { ssr: false });
 import Navbar from "@/components/sections/Navbar";
 import Hero from "@/components/sections/Hero";
 import About from "@/components/sections/About";

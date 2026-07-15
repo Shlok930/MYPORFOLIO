@@ -48,12 +48,43 @@ export default function Hero() {
           {/* ─── LEFT: Text content ─── */}
           <div className="flex flex-col gap-8 flex-1 min-w-0">
 
-            {/* Badge row */}
+            {/* ── Mobile-only: compact photo + name row ── */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, delay: 0.3 }}
+              className="flex lg:hidden items-center gap-4"
+            >
+              {/* Mini portrait */}
+              <div className="relative shrink-0">
+                <div className="absolute inset-0 rounded-2xl bg-accent/15 blur-xl pointer-events-none" />
+                <div className="relative w-20 h-24 rounded-2xl overflow-hidden border border-accent/30 shadow-lg bg-zinc-950">
+                  <img
+                    src="/images/shlok-photo.jpg"
+                    alt="Shlok Pandey"
+                    className="w-full h-full object-cover object-top"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-zinc-950/60 to-transparent" />
+                </div>
+              </div>
+              {/* Name + status pill beside photo */}
+              <div className="flex flex-col gap-1.5">
+                <span className="text-[10px] font-mono uppercase tracking-[0.2em] text-zinc-500">{personalInfo.location}</span>
+                <p className="text-base font-sans font-black text-white leading-tight">Shlok Pandey</p>
+                <span className="text-[10px] font-mono uppercase tracking-[0.2em] text-accent font-bold">Full Stack Dev · AI</span>
+                <div className="inline-flex items-center gap-1.5 bg-emerald-500/10 border border-emerald-500/25 rounded-full px-2.5 py-1 w-fit">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                  <span className="text-[9px] font-mono text-emerald-400 uppercase tracking-wider">Open to work</span>
+                </div>
+              </div>
+            </motion.div>
+
+            {/* Badge row — desktop only */}
             <motion.div
               initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}
-              className="flex flex-col gap-2"
+              className="hidden lg:flex flex-col gap-2"
             >
               <span className="text-xs font-mono uppercase tracking-[0.2em] text-zinc-500">
                 {personalInfo.location}
@@ -131,16 +162,34 @@ export default function Hero() {
                 Get in touch
               </button>
 
-              <a
-                href="/resume/Shlok_Pandey_Resume.pdf"
-                download="Shlok_Pandey_Resume.pdf"
-                target="_blank"
-                rel="noreferrer"
+              <button
+                onClick={async () => {
+                  try {
+                    const response = await fetch(
+                      "https://www.image2url.com/r2/default/documents/1784142209485-27f21cd5-3b4e-4791-bbb9-10f1f8e97d3d.pdf"
+                    );
+                    const blob = await response.blob();
+                    const url = URL.createObjectURL(blob);
+                    const link = document.createElement("a");
+                    link.href = url;
+                    link.setAttribute("download", "Shlok_Pandey_Resume.pdf");
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                    URL.revokeObjectURL(url);
+                  } catch {
+                    // Fallback: open directly in new tab
+                    window.open(
+                      "https://www.image2url.com/r2/default/documents/1784142209485-27f21cd5-3b4e-4791-bbb9-10f1f8e97d3d.pdf",
+                      "_blank"
+                    );
+                  }
+                }}
                 className="px-8 py-4 rounded-full border border-luxury-border text-zinc-300 font-sans text-sm hover:border-accent hover:text-accent transition-colors outline-hidden cursor-pointer inline-flex items-center gap-2"
                 data-cursor="pointer"
               >
                 Résumé ↗
-              </a>
+              </button>
 
               {/* Cursive footnote */}
               <div className="absolute -bottom-8 left-0 font-script text-zinc-500 text-xl hidden md:block">
@@ -168,7 +217,7 @@ export default function Hero() {
             initial={{ opacity: 0, x: 60, scale: 0.95 }}
             animate={{ opacity: 1, x: 0, scale: 1 }}
             transition={{ duration: 1, delay: 0.5, type: "spring", stiffness: 80 }}
-            className="relative shrink-0 hidden lg:block"
+            className="relative shrink-0 hidden lg:flex"
           >
             {/* Glow behind card */}
             <div className="absolute -inset-4 bg-accent/10 rounded-[2.5rem] blur-3xl pointer-events-none" />

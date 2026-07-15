@@ -44,6 +44,7 @@ export default function Loader({ onComplete }: { onComplete: () => void }) {
 
   return (
     <motion.div
+      suppressHydrationWarning
       initial={{ opacity: 1 }}
       exit={{ y: "-100%", opacity: 0 }}
       transition={{ duration: 0.8, ease: [0.76, 0, 0.24, 1] }}

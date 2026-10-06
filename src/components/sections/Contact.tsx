@@ -34,13 +34,13 @@ export default function Contact() {
 
       const data = await response.json();
 
-      if (response.ok) {
+      if (response.ok && data.success) {
         setSuccess(true);
         setForm({ name: "", email: "", message: "" });
       } else {
         setError(data.error || "Something went wrong. Please try again.");
       }
-    } catch (err) {
+    } catch {
       setError("Network error. Please check your connection and try again.");
     } finally {
       setLoading(false);

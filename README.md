@@ -1,5 +1,17 @@
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
+## Contact form email
+
+The contact form sends email through Gmail SMTP using Nodemailer. Set these server-only variables in `.env.local` for local development and in your hosting provider's environment settings for deployment:
+
+```text
+GMAIL_USER=your-gmail-address
+GMAIL_APP_PASS=your-google-app-password
+CONTACT_EMAIL=your-inbox-address
+```
+
+`CONTACT_EMAIL` is optional and defaults to `GMAIL_USER`. Use a Google App Password (with 2-Step Verification enabled), not your regular Gmail password. Keep these values private and never add them to client-side variables such as `NEXT_PUBLIC_*`.
+
 ## Getting Started
 
 First, run the development server:

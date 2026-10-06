@@ -1,51 +1,81 @@
-import { NextRequest, NextResponse } from "next/server";
+import nodemailer from "nodemailer";
+import { NextResponse } from "next/server";
 
-export async function POST(req: NextRequest) {
+export const runtime = "nodejs";
+
+const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === "object" && value !== null;
+}
+
+export async function POST(request: Request) {
+  let body: unknown;
+
   try {
-    const { name, email, message } = await req.json();
+    body = await request.json();
+  } catch {
+    return NextResponse.json({ error: "Request body must be valid JSON." }, { status: 400 });
+  }
 
-    // Basic validation
-    if (!name || !email || !message) {
-      return NextResponse.json(
-        { error: "All fields are required." },
-        { status: 400 }
-      );
-    }
+  if (!isRecord(body)) {
+    return NextResponse.json({ error: "A valid contact message is required." }, { status: 400 });
+  }
 
-    // Web3Forms access key provided by Shlok
-    const accessKey = process.env.WEB3FORMS_ACCESS_KEY || "c993a6fc-6399-4e93-8a86-26f576c34151";
+  const name = typeof body.name === "string" ? body.name.trim() : "";
+  const email = typeof body.email === "string" ? body.email.trim() : "";
+  const message = typeof body.message === "string" ? body.message.trim() : "";
 
-    const response = await fetch("https://api.web3forms.com/submit", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Accept": "application/json",
-      },
-      body: JSON.stringify({
-        access_key: accessKey,
-        name: name,
-        email: email,
-        message: message,
-        subject: `📬 Secure Portfolio Message from ${name}`,
-        from_name: "Portfolio Contact Form",
-      }),
+  if (!name || !email || !message) {
+    return NextResponse.json({ error: "All fields are required." }, { status: 400 });
+  }
+
+  if (name.length > 120 || email.length > 254 || message.length > 5000 || !emailPattern.test(email)) {
+    return NextResponse.json({ error: "Please provide a valid name, email, and message." }, { status: 400 });
+  }
+
+  const sender = process.env.GMAIL_USER?.trim();
+  const appPassword = process.env.GMAIL_APP_PASS?.trim();
+
+  if (!sender || !appPassword) {
+    console.error("Contact email is unavailable: configure GMAIL_USER and GMAIL_APP_PASS.");
+    return NextResponse.json(
+      { error: "The email service is not configured. Please try again later." },
+      { status: 503 }
+    );
+  }
+
+  const recipient = process.env.CONTACT_EMAIL?.trim() || sender;
+  const transporter = nodemailer.createTransport({
+    host: "smtp.gmail.com",
+    port: 465,
+    secure: true,
+    auth: {
+      user: sender,
+      pass: appPassword,
+    },
+    connectionTimeout: 10_000,
+    greetingTimeout: 10_000,
+    socketTimeout: 20_000,
+  });
+
+  try {
+    await transporter.sendMail({
+      from: sender,
+      to: recipient,
+      replyTo: email,
+      subject: "New portfolio contact message",
+      text: `Name: ${name}\nEmail: ${email}\n\n${message}`,
     });
 
-    const data = await response.json();
-
-    if (response.ok && data.success) {
-      return NextResponse.json({ success: true }, { status: 200 });
-    } else {
-      return NextResponse.json(
-        { error: data.message || "Web3Forms submission failed." },
-        { status: response.status || 400 }
-      );
-    }
-  } catch (error: any) {
-    console.error("Submission error:", error);
+    return NextResponse.json({ success: true }, { status: 200 });
+  } catch (error) {
+    console.error("Failed to send contact email:", error);
     return NextResponse.json(
-      { error: `Transmission failed: ${error.message || error}` },
-      { status: 500 }
+      { error: "Your message could not be sent. Please try again later." },
+      { status: 502 }
     );
+  } finally {
+    transporter.close();
   }
 }

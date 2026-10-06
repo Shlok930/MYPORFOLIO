@@ -1,19 +1,27 @@
-const nodemailer = require("nodemailer");
-
 async function testMail() {
+  const [{ default: nodemailer }, { loadEnvConfig }] = await Promise.all([
+    import("nodemailer"),
+    import("@next/env"),
+  ]);
+  loadEnvConfig(process.cwd());
+
+  const user = process.env.GMAIL_USER;
+  const appPassword = process.env.GMAIL_APP_PASS;
+
+  if (!user || !appPassword) {
+    throw new Error("Set GMAIL_USER and GMAIL_APP_PASS in .env.local before running this test.");
+  }
+
   console.log("Starting SMTP test...");
-  
+
   const transporter = nodemailer.createTransport({
     host: "smtp.gmail.com",
-    port: 587,
-    secure: false, // TLS
+    port: 465,
+    secure: true,
     auth: {
-      user: "shlokpan930@gmail.com",
-      pass: "kuyxpwviygqvegnp",
+      user,
+      pass: appPassword,
     },
-    tls: {
-      rejectUnauthorized: false
-    }
   });
 
   try {
@@ -23,16 +31,22 @@ async function testMail() {
 
     console.log("Sending test email...");
     const info = await transporter.sendMail({
-      from: '"SMTP Tester" <shlokpan930@gmail.com>',
-      to: "shlokpan930@gmail.com",
+      from: user,
+      to: process.env.CONTACT_EMAIL || user,
       subject: "Test Email from Local Script",
       text: "If you see this, Nodemailer is working perfectly!",
     });
 
     console.log("Email sent successfully! Message ID:", info.messageId);
   } catch (error) {
-    console.error("Test failed with error:", error);
+    console.error("SMTP test failed:", error.code || "unknown error");
+    process.exitCode = 1;
+  } finally {
+    transporter.close();
   }
 }
 
-testMail();
+testMail().catch((error) => {
+  console.error(error.message);
+  process.exitCode = 1;
+});
